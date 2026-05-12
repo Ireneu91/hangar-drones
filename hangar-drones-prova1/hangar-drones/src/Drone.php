@@ -113,3 +113,4 @@ final class Drone
         $this->flightMinutes += $flightMinutes;
     }
 }
+;

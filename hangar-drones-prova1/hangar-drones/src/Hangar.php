@@ -192,4 +192,4 @@ public function landDrone(Drone $drone, int $flightMinutes): void
     {
         return array_values(array_keys($this->inFlightIds));
     }
-}
+
