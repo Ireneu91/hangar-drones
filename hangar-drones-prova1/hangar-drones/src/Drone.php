@@ -62,9 +62,7 @@ final class Drone
         return $this->status === self::STATUS_MAINTENANCE;
     }
 
-    /**
-     * The drone leaves the hangar for a flight.
-     */
+
     public function takeOff(): void
     {
         if (!$this->isDocked()) {
@@ -74,9 +72,7 @@ final class Drone
         $this->status = self::STATUS_IN_FLIGHT;
     }
 
-    /**
-     * The drone is considered docked only when it is in flight.
-     */
+
     public function markDocked(): void
     {
         if (!$this->isInFlight()) {
@@ -86,9 +82,7 @@ final class Drone
         $this->status = self::STATUS_DOCKED;
     }
 
-    /**
-     * Send the drone to maintenance. Only allowed while docked.
-     */
+ 
     public function sendToMaintenance(): void
     {
         if (!$this->isDocked()) {
@@ -107,9 +101,6 @@ final class Drone
         $this->status = self::STATUS_DOCKED;
     }
 
-    /**
-     * Add minutes for a flight. Only valid while in flight.
-     */
     public function addFlightMinutes(int $flightMinutes): void
     {
         if ($flightMinutes < 0) {
@@ -119,6 +110,7 @@ final class Drone
             throw new \RuntimeException("Drone {$this->id} is not in flight");
         }
 
-        $this->flightMinutes = $flightMinutes;
+        $this->flightMinutes += $flightMinutes;
     }
 }
+;

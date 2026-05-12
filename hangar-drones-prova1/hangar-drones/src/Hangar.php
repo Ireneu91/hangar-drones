@@ -17,6 +17,8 @@ final class Hangar
     /** @var array<string,true> */
     private array $inFlightIds = [];
 
+    private array $inFlight = [];
+
     public function __construct(int $capacity)
     {
         if ($capacity < 1) {
@@ -94,10 +96,9 @@ final class Hangar
         foreach ($this->docked as $id => $drone) {
             unset($this->docked[$id]);
             $drone->takeOff();
-            $this->inFlightIds[$id] = true;
+            $this->inFlight[$id] = $drone;
             return $drone;
         }
-
         throw new \RuntimeException('No drones docked');
     }
 
@@ -107,29 +108,25 @@ final class Hangar
      * - Adds flight minutes to the drone.
      * - The drone ALWAYS enters maintenance (post-flight inspection).
      */
-    public function landDrone(Drone $drone, int $flightMinutes): void
+public function landDrone(Drone $drone, int $flightMinutes): void
     {
-        if ($flightMinutes < 0) {
-            throw new \InvalidArgumentException('flightMinutes must be >= 0');
-        }
-
         $id = $drone->id();
-        if (!isset($this->inFlightIds[$id])) {
+
+        if (!isset($this->inFlight[$id])) {
             throw new \RuntimeException("Drone $id is not in flight from this hangar");
         }
-        if (!$this->hasFreeSlot()) {
-            throw new \RuntimeException('No free slots available');
-        }
+        
+        $activeDrone = $this->inFlight[$id];
 
         // Flight
-        $drone->addFlightMinutes($flightMinutes);
-
+        $activeDrone->addFlightMinutes($flightMinutes);
+        
         // Landing
-        unset($this->inFlightIds[$id]);
+        unset($this->inFlight[$id]);
 
-        $drone->markDocked();
-        $drone->sendToMaintenance();
-        $this->maintenance[$id] = $drone;
+        $activeDrone->markDocked();
+        $activeDrone->sendToMaintenance();
+        $this->maintenance[$id] = $activeDrone;
     }
 
     /**
@@ -195,4 +192,4 @@ final class Hangar
     {
         return array_values(array_keys($this->inFlightIds));
     }
-}
+
