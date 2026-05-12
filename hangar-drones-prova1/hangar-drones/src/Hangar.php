@@ -68,6 +68,20 @@ final class Hangar
     public function addDrone(Drone $drone): void
     {
         $id = $drone->id();
+
+        if (
+            isset($this->docked[$id]) || 
+            isset($this->maintenance[$id]) || 
+            isset($this->inFlight[$id]) || 
+            isset($this->retired[$id])
+        ) {
+            throw new \RuntimeException("Drone $id is already known by this hangar (active or retired)");
+        }
+
+        if ($drone->isRetired()) {
+        throw new \RuntimeException("Cannot add drone $id because it is already retired");
+        }
+        
         if (isset($this->docked[$id]) || isset($this->maintenance[$id]) || isset($this->inFlightIds[$id])) {
             throw new \RuntimeException("Drone $id is already known by this hangar");
         }
@@ -240,4 +254,5 @@ final class Hangar
     {
         return array_values(array_keys($this->retired));
     }
+
 }
