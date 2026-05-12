@@ -9,6 +9,7 @@ final class Drone
     public const STATUS_DOCKED = 'docked';
     public const STATUS_IN_FLIGHT = 'in_flight';
     public const STATUS_MAINTENANCE = 'maintenance';
+    public const STATUS_RETIRED = 'retired';
 
     private string $id;
     private int $flightMinutes;
@@ -121,4 +122,18 @@ final class Drone
 
         $this->flightMinutes = $flightMinutes;
     }
+
+    public function isRetired(): bool
+        {
+            return $this->status === self::STATUS_RETIRED;
+        }
+
+        public function retire(): void
+        {
+            if ($this->isInFlight()) {
+                throw new \RuntimeException("Cannot retire drone {$this->id} while it is in flight!");
+            }
+
+            $this->status = self::STATUS_RETIRED;
+        }
 }
