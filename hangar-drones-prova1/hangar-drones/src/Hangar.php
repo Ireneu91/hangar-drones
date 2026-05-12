@@ -17,7 +17,11 @@ final class Hangar
     /** @var array<string,true> */
     private array $inFlightIds = [];
 
+<<<<<<< HEAD
     private array $inFlight = [];
+=======
+    private array $retired = [];
+>>>>>>> feature/retire-drone
 
     public function __construct(int $capacity)
     {
@@ -68,6 +72,20 @@ final class Hangar
     public function addDrone(Drone $drone): void
     {
         $id = $drone->id();
+
+        if (
+            isset($this->docked[$id]) || 
+            isset($this->maintenance[$id]) || 
+            isset($this->inFlight[$id]) || 
+            isset($this->retired[$id])
+        ) {
+            throw new \RuntimeException("Drone $id is already known by this hangar (active or retired)");
+        }
+
+        if ($drone->isRetired()) {
+        throw new \RuntimeException("Cannot add drone $id because it is already retired");
+        }
+        
         if (isset($this->docked[$id]) || isset($this->maintenance[$id]) || isset($this->inFlightIds[$id])) {
             throw new \RuntimeException("Drone $id is already known by this hangar");
         }
@@ -193,3 +211,50 @@ public function landDrone(Drone $drone, int $flightMinutes): void
         return array_values(array_keys($this->inFlightIds));
     }
 
+<<<<<<< HEAD
+=======
+    public function retiredCount(): int
+    {
+        return count($this->retired);
+    }
+
+
+    public function retireDrone(string $droneId): void
+    {
+    $droneId = trim($droneId);
+    if ($droneId === '') {
+        throw new \InvalidArgumentException('droneId must be a non-empty string');
+    }
+
+    if (isset($this->inFlight[$droneId])) {
+        throw new \RuntimeException("Drone $droneId is in flight and cannot be retired");
+    }
+
+    $drone = null;
+
+    if (isset($this->docked[$droneId])) {
+        $drone = $this->docked[$droneId];
+        unset($this->docked[$droneId]);
+    } elseif (isset($this->maintenance[$droneId])) {
+        $drone = $this->maintenance[$droneId];
+        unset($this->maintenance[$droneId]);
+    }
+
+    if ($drone === null) {
+        throw new \RuntimeException("Drone $droneId not found in hangar slots");
+    }
+
+    $drone->retire();
+    $this->retired[$droneId] = $drone;
+    }
+
+    /**
+     * @return list<string>
+     */
+    public function retiredDroneIds(): array
+    {
+        return array_values(array_keys($this->retired));
+    }
+
+}
+>>>>>>> feature/retire-drone

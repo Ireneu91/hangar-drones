@@ -3,7 +3,11 @@
         'name' => 'didactic/hangar-drones',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
+<<<<<<< HEAD
         'reference' => '7428d5eb979746b918175388f39571d8e062ebe7',
+=======
+        'reference' => '2880800f5e248249629c3775a0e1fe460bc06b21',
+>>>>>>> feature/retire-drone
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -13,7 +17,11 @@
         'didactic/hangar-drones' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
+<<<<<<< HEAD
             'reference' => '7428d5eb979746b918175388f39571d8e062ebe7',
+=======
+            'reference' => '2880800f5e248249629c3775a0e1fe460bc06b21',
+>>>>>>> feature/retire-drone
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

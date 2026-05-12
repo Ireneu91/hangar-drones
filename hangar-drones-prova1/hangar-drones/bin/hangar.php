@@ -45,3 +45,20 @@ echo "Docked IDs: " . implode(', ', $hangar->dockedDroneIds()) . "\n";
 if ($hangar->maintenanceCount() > 0) {
     echo "Maintenance IDs: " . implode(', ', $hangar->maintenanceDroneIds()) . "\n";
 }
+
+$targetId = 'D2';
+echo "\nRetiring drone: $targetId\n";
+
+$hangar->retireDrone($targetId);
+
+echo "Docked:      {$hangar->dockedCount()}\n";
+echo "Maintenance: {$hangar->maintenanceCount()}\n";
+echo "Retired:     {$hangar->retiredCount()}\n";
+
+echo "Inside Hangar (Occupied slots): {$hangar->insideCount()} / {$hangar->capacity()}\n";
+echo "Retired IDs: " . implode(', ', $hangar->retiredDroneIds()) . "\n";
+echo "Docked IDs:  " . implode(', ', $hangar->dockedDroneIds()) . "\n";
+
+if ($hangar->hasFreeSlot()) {
+    echo "\nSlot availability confirmed: Hangar can accept new drones.\n";
+}
